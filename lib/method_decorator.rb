@@ -23,6 +23,11 @@ module MethodDecorator extend ActiveSupport::Concern
 
     end
 
+    def call_original_method(target, *args, &block)
+      original_method_name = self.singleton_class.original_method_name_for target
+      send original_method_name, *args, &block
+    end
+
   end
 
 end

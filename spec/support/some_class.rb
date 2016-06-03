@@ -7,10 +7,9 @@ class SomeClass
   include MethodDecorator
 
   method_to_override = :some_method
-  original_method_name = original_method_name_for(method_to_override)
-  decorate_method method_to_override do |some_arg|
+  decorate_method method_to_override do |*args|
     puts :decorated_some_method
-    send original_method_name, some_arg
+    call_original_method method_to_override, *args
   end
 
   class << self
@@ -22,10 +21,9 @@ class SomeClass
     include MethodDecorator
 
     method_to_override = :some_method
-    original_method_name = original_method_name_for(method_to_override)
-    decorate_method method_to_override do |some_arg|
+    decorate_method method_to_override do |*args|
       puts :decorated_some_method
-      send original_method_name, some_arg
+      call_original_method method_to_override, *args
     end
 
   end
