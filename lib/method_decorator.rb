@@ -4,6 +4,8 @@ module MethodDecorator extend ActiveSupport::Concern
 
     class << self
 
+      private
+
       def decorate_method(target, &block)
         original_method_name = original_method_name_for target
         complex_method_name = decorated_method_name_for target
@@ -21,6 +23,13 @@ module MethodDecorator extend ActiveSupport::Concern
         "decorated_#{target}"
       end
 
+    end
+
+    private
+
+    def call_original_method(target, *args, &block)
+      original_method_name = self.singleton_class.send :original_method_name_for, target
+      send original_method_name, *args, &block
     end
 
   end
