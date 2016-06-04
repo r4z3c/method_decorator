@@ -16,11 +16,12 @@ Rake::TestTask.new(:test) do |t|
   t.test_files = FileList['test/**/test_*.rb']
 end
 
-RDoc::Task.new do |doc|
-  doc.main   = 'README.rdoc'
-  doc.title  = 'Rake -- Ruby Make'
-  doc.rdoc_files = FileList.new %w[lib MIT-LICENSE doc/**/*.rdoc *.rdoc]
-  doc.rdoc_dir = 'html'
+RDoc::Task.new do |rdoc|
+  rdoc.rdoc_dir = 'rdoc'
+  rdoc.title    = 'MethodDecorator'
+  rdoc.options << '--line-numbers'
+  rdoc.rdoc_files.include('README.rdoc')
+  rdoc.rdoc_files.include('lib/**/*.rb')
 end
 
 require 'rspec/core/rake_task'
