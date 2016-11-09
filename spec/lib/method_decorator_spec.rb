@@ -12,15 +12,14 @@ describe MethodDecorator do
     expect(target).to receive(:puts).with(some_arg).ordered
   end
 
-  context '' do
+  context 'when singleton method context' do
     let(:target) { SomeClass }
-
     it { subject }
   end
 
-  context '' do
+  context 'when instance method context' do
     let(:target) { SomeClass.new }
-
+    let(:methods) { target.class.send :generated_methods }
     it { subject }
   end
 
