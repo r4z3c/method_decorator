@@ -1,37 +1,29 @@
-module MethodDecorator extend ActiveSupport::Concern
+require 'method_decorator/repository'
 
-  included do
+module MethodDecorator
+  class << self
 
-    class << self
-
-      private
-
-      def decorate_method(target, &block)
-        original_method_name = original_method_name_for target
-        complex_method_name = decorated_method_name_for target
-
-        alias_method original_method_name, target
-        define_method complex_method_name, &block
-        alias_method target, complex_method_name
-      end
-
-      def original_method_name_for(target)
-        "original_#{target}"
-      end
-
-      def decorated_method_name_for(target)
-        "decorated_#{target}"
-      end
-
+    def decorate(target_class, target_name, &decoration)
+      added = Repository.add_decoration target_class, target_name, &decoration
+      target_class.send :define_method, target_name, &decoration if added
+      added
     end
 
-    private
+    def call_original(target_context, target_name, *original_args, &original_block)
+      target_class = target_class target_context
+      target_method = Repository.original_method target_class, target_name
+      target_method.bind(target_context).call *original_args, &original_block
+    end
 
-    def call_original_method(target, *args, &block)
-      original_method_name = self.singleton_class.send :original_method_name_for, target
-      send original_method_name, *args, &block
+    def target_class(target_context)
+      target_type(target_context).eql?(:singleton) ?
+      target_context.singleton_class :
+      target_context.class
+    end
+
+    def target_type(target_context)
+      target_context.class.eql?(Class) ? :singleton : :class
     end
 
   end
-
 end
