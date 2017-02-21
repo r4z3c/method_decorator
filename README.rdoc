@@ -1,8 +1,10 @@
 = Method Decorator
 
-Provides a way to dynamically overwrite methods without losing original behavior.
+Provides a way to dynamically override methods without losing original behavior.
 
 == Example
+
+For a given class:
 
     class SomeClass
 
@@ -14,7 +16,7 @@ Provides a way to dynamically overwrite methods without losing original behavior
 
     MethodDecorator.decorate SomeClass, :some_method do |*args|
         puts :decorated_some_method
-        MethodDecorator.call_original self, :some_method, *args
+        MethodDecorator.call_original_method self, :some_method, *args
     end
 
 This call:
@@ -44,7 +46,7 @@ It works too:
 
     MethodDecorator.decorate SomeClass.singleton_class, :some_method do |*args|
         puts :decorated_some_method
-        MethodDecorator.call_original self, :some_method, *args
+        MethodDecorator.call_original_method self, :some_method, *args
     end
 
     SomeClass.some_method 'some arg'
