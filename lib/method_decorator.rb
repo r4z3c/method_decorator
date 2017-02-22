@@ -1,6 +1,18 @@
 require 'method_decorator/repository'
 
-module MethodDecorator
+module MethodDecorator extend ActiveSupport::Concern
+
+  included do
+
+    class << self
+
+      def decorate(target_method_name, &decoration)
+        MethodDecorator.decorate self, target_method_name, &decoration
+      end
+
+    end
+
+  end
 
   class << self
 
@@ -25,9 +37,25 @@ module MethodDecorator
     def override_method(decoration, target_class, target_method_name)
       is_protected = target_class.protected_instance_methods.include? target_method_name
       is_private = target_class.private_instance_methods.include? target_method_name
-      target_class.send :define_method, target_method_name, &decoration
+      define_decorated_method decoration, target_class, target_method_name
       target_class.instance_eval { protected target_method_name } if is_protected
       target_class.instance_eval { private target_method_name } if is_private
+    end
+
+    def define_decorated_method(decoration, target_class, target_method_name)
+      target_class.send :define_method, target_method_name do |*args, &block|
+        target_class.send :define_method, :call_args do return *args end
+        target_class.send :define_method, :call_block do return block end
+        target_class.send :define_method, :call_original do
+          MethodDecorator.call_original_method self, target_method_name, *call_args, &call_block
+        end
+        target_class.send :define_method, :call_original_with do |*desired_args, &desired_block|
+          MethodDecorator.call_original_method self, target_method_name, *desired_args, &desired_block
+        end
+        target_class.instance_eval { protected :call_args }
+        target_class.instance_eval { protected :call_block }
+        instance_eval &decoration
+      end
     end
 
     public

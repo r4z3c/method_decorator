@@ -14,9 +14,9 @@ For a given class:
 
     end
 
-    MethodDecorator.decorate SomeClass, :some_method do |*args|
-        puts :decorated_some_method
-        MethodDecorator.call_original_method self, :some_method, *args
+    MethodDecorator.decorate SomeClass, :some_method do
+        puts "decorated_some_method_with: #{call_args}"
+        call_original
     end
 
 This call:
@@ -25,8 +25,36 @@ This call:
 
 Produces this output:
 
-    decorated_some_method
+    decorated_some_method_with: ["some arg"]
     some arg
+
+== Helper Methods
+
+Inside the block given to `MethodDecorator.decorate`, you can call four helper methods:
+
+    call_args          # returns original arguments given to the call
+    call_block         # returns original block given to the call
+    call_original      # call the original method, with original args and block given to the call
+    call_original_with # call the original method, with desired args and block
+
+== Module inclusion
+
+You can call `decorate` method directly instead of calling `MethodDecorator.decorate`. Just include `MethodDecorator` module:
+
+    class SomeClass
+
+        def some_method(some_arg)
+            puts some_arg
+        end
+
+        include MethodDecorator
+
+        decorate :some_method do
+            puts "decorated_some_method_with: #{call_args}"
+            call_original
+        end
+
+    end
 
 == Singleton Classes Support
 
@@ -44,12 +72,16 @@ It works too:
 
     end
 
-    MethodDecorator.decorate SomeClass.singleton_class, :some_method do |*args|
-        puts :decorated_some_method
-        MethodDecorator.call_original_method self, :some_method, *args
+    MethodDecorator.decorate SomeClass.singleton_class, :some_method do
+        puts "decorated_some_method_with: #{call_args}"
+        call_original
     end
 
     SomeClass.some_method 'some arg'
+
+== More
+
+To see more of `MethodDecorator` usages, please take a look at DummyClass[https://github.com/r4z3c/method_decorator/blob/master/spec/support/dummy_class.rb].
 
 ===
 

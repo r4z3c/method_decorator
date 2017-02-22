@@ -12,27 +12,57 @@ describe MethodDecorator do
 
     context 'when public method' do
 
-      before { expect(target_instance).to receive(:puts).with(:a_decorated_public_instance_method).ordered }
-      before { expect(target_instance).to receive(:puts).with("a_public_instance_method_arg: #{dummy_arg}").ordered }
+      context 'when through module singleton method' do
 
-      it { target_instance.a_public_instance_method dummy_arg }
+        before { expect(target_instance).to receive(:puts).with("a_decorated_public_instance_method_with: #{[dummy_arg]}").ordered }
+        before { expect(target_instance).to receive(:puts).with("a_public_instance_method_arg: #{dummy_arg}").ordered }
+
+        it { target_instance.a_public_instance_method dummy_arg }
+
+      end
+
+      context 'when through module inclusion' do
+
+        before { expect(target_instance).to receive(:puts).with("another_decorated_public_instance_method_with: #{[dummy_arg]}").ordered }
+        before { expect(target_instance).to receive(:puts).with("another_public_instance_method_arg: #{dummy_arg}").ordered }
+
+        it { target_instance.another_public_instance_method dummy_arg }
+
+      end
 
     end
 
     context 'when protected method' do
 
-      context 'when calling protected method deliberately' do
+      context 'when calling original method through `call_original`' do
 
-        it { expect{target_instance.a_protected_instance_method dummy_arg}.to raise_error NoMethodError }
+        context 'when calling protected method deliberately' do
+
+          it { expect{target_instance.a_protected_instance_method dummy_arg}.to raise_error NoMethodError }
+
+        end
+
+        context 'when calling protected method through `send`' do
+
+          before { expect(target_instance).to receive(:puts).with("a_decorated_protected_instance_method_with: #{[dummy_arg]}").ordered }
+          before { expect(target_instance).to receive(:puts).with("a_protected_instance_method_arg: #{dummy_arg}").ordered }
+
+          it { target_instance.send :a_protected_instance_method, dummy_arg }
+
+        end
 
       end
 
-      context 'when calling protected method through `send`' do
+      context 'when calling original method through `call_original_with`' do
 
-        before { expect(target_instance).to receive(:puts).with(:a_decorated_protected_instance_method).ordered }
-        before { expect(target_instance).to receive(:puts).with("a_protected_instance_method_arg: #{dummy_arg}").ordered }
+        context 'when calling protected method through `send`' do
 
-        it { target_instance.send :a_protected_instance_method, dummy_arg }
+          before { expect(target_instance).to receive(:puts).with("another_decorated_protected_instance_method_with: #{[dummy_arg]}").ordered }
+          before { expect(target_instance).to receive(:puts).with("another_protected_instance_method_arg: hue").ordered }
+
+          it { target_instance.send :another_protected_instance_method, dummy_arg }
+
+        end
 
       end
 
@@ -48,7 +78,7 @@ describe MethodDecorator do
 
       context 'when calling private method through `send`' do
 
-        before { expect(target_instance).to receive(:puts).with(:a_decorated_private_instance_method).ordered }
+        before { expect(target_instance).to receive(:puts).with("a_decorated_private_instance_method_with: #{[dummy_arg]}").ordered }
         before { expect(target_instance).to receive(:puts).with("a_private_instance_method_arg: #{dummy_arg}").ordered }
 
         it { target_instance.send :a_private_instance_method, dummy_arg }
@@ -66,10 +96,23 @@ describe MethodDecorator do
 
     context 'when public method' do
 
-      before { expect(target_instance).to receive(:puts).with(:a_decorated_public_singleton_method).ordered }
-      before { expect(target_instance).to receive(:puts).with("a_public_singleton_method_arg: #{dummy_arg}").ordered }
+      context 'when through module singleton method' do
 
-      it { target_instance.a_public_singleton_method dummy_arg }
+        before { expect(target_instance).to receive(:puts).with("a_decorated_public_singleton_method_with: #{[dummy_arg]}").ordered }
+        before { expect(target_instance).to receive(:puts).with("a_public_singleton_method_arg: #{dummy_arg}").ordered }
+
+        it { target_instance.a_public_singleton_method dummy_arg }
+
+      end
+
+      context 'when through module inclusion' do
+
+        before { expect(target_instance).to receive(:puts).with("another_decorated_public_singleton_method_with: #{[dummy_arg]}").ordered }
+        before { expect(target_instance).to receive(:puts).with("another_public_singleton_method_arg: #{dummy_arg}").ordered }
+
+        it { target_instance.another_public_singleton_method dummy_arg }
+
+      end
 
     end
 
@@ -83,7 +126,7 @@ describe MethodDecorator do
 
       context 'when calling protected method through `send`' do
 
-        before { expect(target_instance).to receive(:puts).with(:a_decorated_protected_singleton_method).ordered }
+        before { expect(target_instance).to receive(:puts).with("a_decorated_protected_singleton_method_with: #{[dummy_arg]}").ordered }
         before { expect(target_instance).to receive(:puts).with("a_protected_singleton_method_arg: #{dummy_arg}").ordered }
 
         it { target_instance.send :a_protected_singleton_method, dummy_arg }
@@ -102,7 +145,7 @@ describe MethodDecorator do
 
       context 'when calling private method through `send`' do
 
-        before { expect(target_instance).to receive(:puts).with(:a_decorated_private_singleton_method).ordered }
+        before { expect(target_instance).to receive(:puts).with("a_decorated_private_singleton_method_with: #{[dummy_arg]}").ordered }
         before { expect(target_instance).to receive(:puts).with("a_private_singleton_method_arg: #{dummy_arg}").ordered }
 
         it { target_instance.send :a_private_singleton_method, dummy_arg }
