@@ -1,4 +1,5 @@
 require 'method_decorator/repository'
+require 'active_support/concern'
 
 module MethodDecorator extend ActiveSupport::Concern
 
