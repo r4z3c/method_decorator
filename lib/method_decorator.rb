@@ -55,7 +55,7 @@ module MethodDecorator extend ActiveSupport::Concern
         end
         target_class.instance_eval { protected :call_args }
         target_class.instance_eval { protected :call_block }
-        instance_eval &decoration
+        instance_eval(&decoration)
       end
     end
 

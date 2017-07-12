@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.authors     = ['r4z3c']
   s.email       = ['r4z3c.43@gmail.com']
   s.homepage    = 'https://github.com/r4z3c/method_decorator.git'
-  s.summary     = 'Overwrite methods preserving the original behavior'
-  s.description = 'Provides a way to dynamically overwrite methods without losing original behavior'
+  s.summary     = 'Override methods preserving the original behavior'
+  s.description = 'Provides a way to dynamically override methods without losing original behavior'
   s.licenses    = %w(MIT)
 
   s.files = `git ls-files`.split("\n")
@@ -22,4 +22,6 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'rspec', '>= 3'
   s.add_development_dependency 'simplecov', '>= 0'
+  s.add_development_dependency 'codeclimate-test-reporter'
+  s.add_development_dependency 'rake'
 end

@@ -1,4 +1,8 @@
 = Method Decorator
+{<img src="https://travis-ci.org/r4z3c/method_decorator.svg?branch=master" alt="Build Status" />}[https://travis-ci.org/r4z3c/method_decorator]
+{<img src="https://codeclimate.com/github/r4z3c/method_decorator/badges/gpa.svg" alt="Code Climate" />}[https://codeclimate.com/github/r4z3c/method_decorator]
+{<img src="https://codeclimate.com/github/r4z3c/method_decorator/badges/coverage.svg" alt="Code Coverage" />}[https://codeclimate.com/github/r4z3c/method_decorator/coverage]
+{<img src="https://codeclimate.com/github/r4z3c/method_decorator/badges/issue_count.svg" alt="Issue Count" />}[https://codeclimate.com/github/r4z3c/method_decorator]
 
 Provides a way to dynamically override methods without losing original behavior.
 
