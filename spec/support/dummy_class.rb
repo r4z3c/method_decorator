@@ -1,5 +1,6 @@
-class DummyClass
+# frozen_string_literal: true
 
+class DummyClass
   def a_public_instance_method(arg)
     puts "a_public_instance_method_arg: #{arg}"
   end
@@ -25,7 +26,6 @@ class DummyClass
   end
 
   class << self
-
     def a_public_singleton_method(arg)
       puts "a_public_singleton_method_arg: #{arg}"
     end
@@ -52,7 +52,6 @@ class DummyClass
       puts "another_decorated_public_singleton_method_with: #{call_args}"
       call_original
     end
-
   end
 
   include MethodDecorator
@@ -61,7 +60,6 @@ class DummyClass
     puts "another_decorated_public_instance_method_with: #{call_args}"
     call_original
   end
-
 end
 
 MethodDecorator.decorate DummyClass, :a_public_instance_method do

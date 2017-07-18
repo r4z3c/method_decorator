@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Rakefile for rake        -*- ruby -*-
 
 # Copyright 2003, 2004, 2005 by Jim Weirich (jim@weirichhouse.org)
@@ -11,7 +13,7 @@ require 'rake/testtask'
 require 'rdoc/task'
 
 Rake::TestTask.new(:test) do |t|
-  t.libs << "test"
+  t.libs << 'test'
   t.verbose = true
   t.test_files = FileList['test/**/test_*.rb']
 end
@@ -27,7 +29,7 @@ end
 require 'rspec/core/rake_task'
 
 RSpec::Core::RakeTask.new(:spec) do |t|
-  t.rspec_opts = %w(--color)
+  t.rspec_opts = %w[--color]
 end
 
-task :default => :spec
+task default: :spec
